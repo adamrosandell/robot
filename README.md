@@ -17,3 +17,4 @@ den ska åka.
 Till denna kommer alla sensorer sitta och ska förmedla viktig information till motor arduino så att denna kan ta
 rätt beslut. Som
 
+# I mappen trail finns alla testprogram
