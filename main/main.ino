@@ -4,14 +4,22 @@ Info om states
 0 HALT sätter stop för roboten
 1 APP_PRODUCE första steget
 2 RUN kör frammåt
+3 THROW kastar bollar till andra sidan planen
 
 */
+
+Servo servo;  
+// twelve servo objects can be created on most boards
+
+int pos = 0;    
 void setup() {
   // put your setup code here, to run once:
   //Setup Channel A
   pinMode(12, OUTPUT); //Initiates Motor Channel A pin
   pinMode(9, OUTPUT); //Initiates Brake Channel A pin
   state = 1;
+  servo.attach(9);  
+
 }
 
 void loop() {
@@ -20,7 +28,7 @@ void loop() {
 
     case 1:
       state = 2;
-
+      
     break;
 
     case 2:
@@ -47,10 +55,21 @@ void loop() {
   
     break;
 
+    case 4:
+      for (pos = 0; pos <= 180; pos += 1) { 
+        // in steps of 1 degree
+        servo.write(pos);              
+        delay(5);                       
+     }
+      for (pos = 180; pos >= 0; pos -= 1) { 
+        servo.write(pos);              
+        delay(5);                       
+    }
 
+    break;
 
     case 0:
-    
+
     break;
   }
 }
