@@ -1,4 +1,5 @@
 #include <Servo.h>
+
 int state = 0;
 /*
 Info om states
@@ -7,12 +8,13 @@ Info om states
 2 RUN kör frammåt
 3 THROW kastar bollar till andra sidan planen
 4 avståndsmätare
+5 avståndsmätare average av 50 mätningar
 
 */
 
 int trigPin = 11;    // Trigger
 int echoPin = 12;    // Echo
-long duration, cm, inches;
+long duration, cm, inches, averagecm;
 
 Servo servo;  
 // twelve servo objects can be created on most boards
@@ -114,9 +116,31 @@ void loop() {
       delay(250);
 
       //trail 
-      state = 1;
+      state =1;
     break;
 
+    case 5:
+      
+      for(int i = 0; i<50; ++i){
+      digitalWrite(trigPin, LOW);
+      delayMicroseconds(5);
+      digitalWrite(trigPin, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(trigPin, LOW);
+ 
+      // Read the signal from the sensor: a HIGH pulse whose
+      // duration is the time (in microseconds) from the sending
+      // of the ping to the reception of its echo off of an object.
+      pinMode(echoPin, INPUT);
+      duration = pulseIn(echoPin, HIGH);
+ 
+      // Convert the time into a distance
+      cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
+
+      averagecm +=cm;
+      }
+      averagecm=averagecm/50;
+    break;
     case 0:
 
     break;
