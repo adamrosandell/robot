@@ -1,3 +1,4 @@
+#include <Servo.h>
 int state = 0;
 /*
 Info om states
@@ -22,7 +23,9 @@ void setup() {
   //Setup Channel A
   pinMode(12, OUTPUT); //Initiates Motor Channel A pin
   pinMode(9, OUTPUT); //Initiates Brake Channel A pin
+  
   state = 1;
+
   servo.attach(9);  
 
     //Serial Port begin
@@ -64,9 +67,11 @@ void loop() {
   
       delay(1000);
   
+     // Trail
+     state = 3;
     break;
 
-    case 4:
+    case 3:
       for (pos = 0; pos <= 180; pos += 1) { 
         // in steps of 1 degree
         servo.write(pos);              
@@ -77,34 +82,39 @@ void loop() {
         delay(5);                       
     }
 
+      //Trail
+      state = 4;
     break;
 
     case 4:
-     // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
-  // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(5);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
+      // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
+      // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
+      digitalWrite(trigPin, LOW);
+      delayMicroseconds(5);
+      digitalWrite(trigPin, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(trigPin, LOW);
  
-  // Read the signal from the sensor: a HIGH pulse whose
-  // duration is the time (in microseconds) from the sending
-  // of the ping to the reception of its echo off of an object.
-  pinMode(echoPin, INPUT);
-  duration = pulseIn(echoPin, HIGH);
+      // Read the signal from the sensor: a HIGH pulse whose
+      // duration is the time (in microseconds) from the sending
+      // of the ping to the reception of its echo off of an object.
+      pinMode(echoPin, INPUT);
+      duration = pulseIn(echoPin, HIGH);
  
-  // Convert the time into a distance
-  cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
-  inches = (duration/2) / 74;   // Divide by 74 or multiply by 0.0135
+      // Convert the time into a distance
+      cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
+      inches = (duration/2) / 74;   // Divide by 74 or multiply by 0.0135
   
-  Serial.print(inches);
-  Serial.print("in, ");
-  Serial.print(cm);
-  Serial.print("cm");
-  Serial.println();
+      Serial.print(inches);
+      Serial.print("in, ");
+      Serial.print(cm);
+      Serial.print("cm");
+      Serial.println();
   
-  delay(250);
+      delay(250);
+
+      //trail 
+      state = 1;
     break;
 
     case 0:
