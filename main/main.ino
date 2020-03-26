@@ -5,8 +5,13 @@ Info om states
 1 APP_PRODUCE första steget
 2 RUN kör frammåt
 3 THROW kastar bollar till andra sidan planen
+4 avståndsmätare
 
 */
+
+int trigPin = 11;    // Trigger
+int echoPin = 12;    // Echo
+long duration, cm, inches;
 
 Servo servo;  
 // twelve servo objects can be created on most boards
@@ -19,6 +24,12 @@ void setup() {
   pinMode(9, OUTPUT); //Initiates Brake Channel A pin
   state = 1;
   servo.attach(9);  
+
+    //Serial Port begin
+  Serial.begin (9600);
+  //Define inputs and outputs
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
 
 }
 
@@ -66,6 +77,34 @@ void loop() {
         delay(5);                       
     }
 
+    break;
+
+    case 4:
+     // The sensor is triggered by a HIGH pulse of 10 or more microseconds.
+  // Give a short LOW pulse beforehand to ensure a clean HIGH pulse:
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(5);
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+ 
+  // Read the signal from the sensor: a HIGH pulse whose
+  // duration is the time (in microseconds) from the sending
+  // of the ping to the reception of its echo off of an object.
+  pinMode(echoPin, INPUT);
+  duration = pulseIn(echoPin, HIGH);
+ 
+  // Convert the time into a distance
+  cm = (duration/2) / 29.1;     // Divide by 29.1 or multiply by 0.0343
+  inches = (duration/2) / 74;   // Divide by 74 or multiply by 0.0135
+  
+  Serial.print(inches);
+  Serial.print("in, ");
+  Serial.print(cm);
+  Serial.print("cm");
+  Serial.println();
+  
+  delay(250);
     break;
 
     case 0:
